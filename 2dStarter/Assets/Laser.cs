@@ -144,6 +144,7 @@ public class Laser : MonoBehaviour
         poss.Add(position);
 
         // Recursive call;
-        return drawReflection(position, direction, bounceCount + 2, refRemaining--, poss);
+        //refRemaining = refRemaining - 1;
+        return drawReflection(position, direction, bounceCount+1, refRemaining-1, poss);
     }
 }
