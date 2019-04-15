@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Laser.cs" />
+    <Compile Include="Assets\Space Objects\Readme\Readme Files\Scripts\Readme.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/mrenn/Documents/Studium/4. Semester/GameDevelopment/git/GameDevelopment/2dStarter/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

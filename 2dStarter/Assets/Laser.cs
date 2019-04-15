@@ -127,6 +127,7 @@ public class Laser : MonoBehaviour
 
         // Weiter reflektieren;
 
+
         if(Physics.Raycast(position, direction, out RaycastHit hit, maxDistance))
         {
             //Laser trifft irgendwas;
