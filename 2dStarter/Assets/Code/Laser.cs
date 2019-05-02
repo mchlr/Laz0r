@@ -37,9 +37,7 @@ public class Laser : MonoBehaviour
     // Davids Klasse;
 
     private int i = 1;
-    private GameObject box;
     private Grid[] grid;
-    private Vector3 mouse_pos, tile_pos;
 
     // David 
 
@@ -67,38 +65,11 @@ public class Laser : MonoBehaviour
     public void Update()
     {
 
-        // Code aus David's Mirrorplacing.cs;
-
         if (Input.GetMouseButtonDown(0))
         {
 
-            mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mouse_pos[2] = 0; // Setze z == 0;
-
-
-            /*tile_pos = grid[0].WorldToCell(mouse_pos);
-            tile_pos[1] -= 4; 
-            tile_pos[2] = 0;   Klappt alles noch nicht*/
-
-            //Debug.Log(mouse_pos);
-            //Debug.Log(tile_pos);
-
-            box = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            box.gameObject.name = "Spiegel " + i;
-
-
-            // Notiz Michael: Warum entfernst du den BoxCollider und addest einen MeshCollider? Wir brauchen doch den BoxColider, weil wir quasi die 3D-Physik verwenden;
-
-            //Destroy(box.GetComponent<BoxCollider>());
-            //box.AddComponent<MeshCollider>();
-
-            box.transform.SetParent(grid[0].transform);
-            box.transform.Rotate(0, 0, 45);
-            box.transform.position = mouse_pos;
-            //box.transform.position = tile_pos;
-            box.transform.localScale = new Vector3(1, 1, 1);
-
-            i++;
+            addMirror();
+            
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -350,4 +321,104 @@ public class Laser : MonoBehaviour
 
         return CubeFace.None;
     }
+
+    // Code aus David's Mirrorplacing.cs;
+    private void addMirror()
+    {
+        bool isObject = false;
+        Vector3 mouse_pos, tile_pos;
+        GameObject[] oldMir;
+        GameObject newMir;
+
+        mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        tile_pos = new Vector3();
+
+        /*tile_pos = grid[0].WorldToCell(mouse_pos); // rundet immer nur ab
+        tile_pos[2] = 0; //z = 0*/
+
+        //Tile wird am rand der Grid-Rechtecke gesetzt
+        /*
+        if(mouse_pos[0] < (int) mouse_pos[0] + 0.5)
+        {
+           tile_pos[0] = (int) mouse_pos[0];
+        }
+        else
+        {
+            tile_pos[0] = (int) mouse_pos[0] + 1;
+        }
+
+        if (mouse_pos[1] < (int)mouse_pos[1] + 0.5)
+        {
+            tile_pos[1] = (int)mouse_pos[1];
+        }
+        else
+        {
+            tile_pos[1] = (int)mouse_pos[1] + 1;
+        }
+        */
+
+        //Tile wird in die Mitte des Grid-Rechtecks gesetzt
+
+        if (mouse_pos[0] >= 0)
+        {
+            tile_pos[0] = (int)mouse_pos[0] + 0.5f;
+        }
+        else
+        {
+            tile_pos[0] = (int)mouse_pos[0] - 0.5f;
+        }
+
+
+        if (mouse_pos[1] >= 0)
+        {
+            tile_pos[1] = (int)mouse_pos[1] + 0.5f;
+        }
+        else
+        {
+            tile_pos[1] = (int)mouse_pos[1] - 0.5f;
+        }
+
+        tile_pos[2] = 0; //z = 0
+
+        Debug.Log("Click at " + mouse_pos);
+        Debug.Log("Tile set at " + tile_pos);
+
+        //Überprüfen ob dieser Stelle schon ein Spiegel exestiert
+
+        oldMir = FindObjectsOfType<GameObject>();
+
+        for(int x = 0; x < oldMir.Length; x++)
+        {
+
+            if(oldMir[x].transform.position == tile_pos)
+            {
+                isObject = true;
+                break;
+            }
+
+        }
+
+        if (!isObject)
+        {
+
+            newMir = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            newMir.gameObject.name = "Mirror " + i;
+
+            newMir.transform.SetParent(grid[0].transform);
+            newMir.transform.Rotate(0, 0, 45);
+            newMir.transform.position = tile_pos;
+            newMir.transform.localScale = new Vector3(1, 1, 1);
+
+            Debug.Log("New Mirror " + i);
+
+            i++;
+
+        }
+        else
+        {
+            Debug.Log("Mirror not created");
+        }
+
+    }
+
 }
