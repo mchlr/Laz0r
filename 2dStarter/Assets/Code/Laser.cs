@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+
 
 public class Laser : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class Laser : MonoBehaviour
     {
         public List<Vector3> tracePoints;
         public List<LaserTrace> nodes;
-
+        
         public LaserTrace()
         {
             tracePoints = new List<Vector3>();
@@ -19,7 +21,6 @@ public class Laser : MonoBehaviour
             traceCount++;
         }
     }
-
 
     private LineRenderer lineRenderer;
     public Transform LaserHit;
@@ -36,9 +37,9 @@ public class Laser : MonoBehaviour
 
     // Davids Klasse;
 
-    private int i = 1;
-    private Grid[] grid;
-
+    private int nr = 1;
+    private Tilemap map;
+    
     // David 
 
 
@@ -56,20 +57,20 @@ public class Laser : MonoBehaviour
 
         // Mirrorplacing
 
-        grid = FindObjectsOfType<Grid>();
-
+        map = FindObjectOfType<Tilemap>();
+       
         // Mirrorplacing
     }
 
     // Update is called once per frame
     public void Update()
     {
-
+        
         if (Input.GetMouseButtonDown(0))
         {
 
             addMirror();
-            
+
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -321,103 +322,99 @@ public class Laser : MonoBehaviour
 
         return CubeFace.None;
     }
-
-    // Code aus David's Mirrorplacing.cs;
-    private void addMirror()
+    
+    /// ///////////////////// Davids Zeug
+    
+    public void addMirror()
     {
-        bool isObject = false;
-        Vector3 mouse_pos, tile_pos;
-        GameObject[] oldMir;
-        GameObject newMir;
 
-        mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        tile_pos = new Vector3();
+        GameObject mir;
+        Vector3 mouse_pos, pos = new Vector3();
 
-        /*tile_pos = grid[0].WorldToCell(mouse_pos); // rundet immer nur ab
-        tile_pos[2] = 0; //z = 0*/
+        mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition); Debug.Log("1");
 
-        //Tile wird am rand der Grid-Rechtecke gesetzt
-        /*
-        if(mouse_pos[0] < (int) mouse_pos[0] + 0.5)
-        {
-           tile_pos[0] = (int) mouse_pos[0];
-        }
-        else
-        {
-            tile_pos[0] = (int) mouse_pos[0] + 1;
-        }
+       if (mouse_pos[0] >= 0)
+       {
+            pos[0] = (int)mouse_pos[0] + map.transform.localScale.x / 2;
+       }
+       else
+       {
+           pos[0] = (int)mouse_pos[0] - map.transform.localScale.x / 2;
+       }
 
-        if (mouse_pos[1] < (int)mouse_pos[1] + 0.5)
-        {
-            tile_pos[1] = (int)mouse_pos[1];
-        }
-        else
-        {
-            tile_pos[1] = (int)mouse_pos[1] + 1;
-        }
-        */
 
-        //Tile wird in die Mitte des Grid-Rechtecks gesetzt
+       if(pos[0] % map.transform.localScale.x == 0)//Wenn auf Rahmen gesetzt
+       {
+            pos[0] = (int)mouse_pos[0];
+       }
 
-        if (mouse_pos[0] >= 0)
+
+       if (mouse_pos[0] >= 0)
+       {
+           pos[1] = (int)mouse_pos[1] + map.transform.localScale.y / 2;
+       }
+       else
+       {
+           pos[1] = (int)mouse_pos[1] - map.transform.localScale.y / 2;
+       }
+
+        if (pos[1] % map.transform.localScale.y == 0)//Wenn auf Rahmen gesetzt
         {
-            tile_pos[0] = (int)mouse_pos[0] + 0.5f;
-        }
-        else
-        {
-            tile_pos[0] = (int)mouse_pos[0] - 0.5f;
+            pos[1] = (int)mouse_pos[1];
         }
 
 
-        if (mouse_pos[1] >= 0)
-        {
-            tile_pos[1] = (int)mouse_pos[1] + 0.5f;
-        }
-        else
-        {
-            tile_pos[1] = (int)mouse_pos[1] - 0.5f;
-        }
-
-        tile_pos[2] = 0; //z = 0
+        pos[2] = 0; //z = 0
 
         Debug.Log("Click at " + mouse_pos);
-        Debug.Log("Tile set at " + tile_pos);
+        Debug.Log("Tile set at " + pos);
 
-        //Überprüfen ob dieser Stelle schon ein Spiegel exestiert
-
-        oldMir = FindObjectsOfType<GameObject>();
-
-        for(int x = 0; x < oldMir.Length; x++)
+        if (!isOtherMirror(pos))
         {
 
-            if(oldMir[x].transform.position == tile_pos)
-            {
-                isObject = true;
-                break;
-            }
+            mir = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            mir.gameObject.name = "Mirror " + nr;
 
-        }
+            //newMir.transform.SetParent(grid[0].transform);
+            mir.transform.SetParent(map.transform);
+            mir.transform.Rotate(0, 0, 45);
+            mir.transform.position = pos;
+            mir.transform.localScale = new Vector3(0.7f, 0.7f, 1);
 
-        if (!isObject)
-        {
+            Debug.Log("New Mirror " + nr);
 
-            newMir = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            newMir.gameObject.name = "Mirror " + i;
-
-            newMir.transform.SetParent(grid[0].transform);
-            newMir.transform.Rotate(0, 0, 45);
-            newMir.transform.position = tile_pos;
-            newMir.transform.localScale = new Vector3(1, 1, 1);
-
-            Debug.Log("New Mirror " + i);
-
-            i++;
+            nr++;
 
         }
         else
         {
             Debug.Log("Mirror not created");
         }
+
+
+    }
+
+    public bool isOtherMirror(Vector3 pos)
+    {
+
+        bool erg = false;
+        GameObject[] otherMir;
+
+        otherMir = FindObjectsOfType<GameObject>();
+
+        for (int x = 0; x < otherMir.Length - 1; x++) //-1 weil will ja nicht den Akt;
+        {
+
+            if (otherMir[x].transform.position == pos)
+            {
+                erg = true;
+
+                break;
+            }
+
+        }
+
+        return erg;
 
     }
 
