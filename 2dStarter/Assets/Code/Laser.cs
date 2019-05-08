@@ -37,9 +37,10 @@ public class Laser : MonoBehaviour
 
     // Davids Klasse;
 
-    private int nr = 1;
     private Tilemap map;
-    
+    private List<Mirror> mirrors;
+    private bool mirrorAdded = false;
+
     // David 
 
 
@@ -56,26 +57,38 @@ public class Laser : MonoBehaviour
         hasChanges = true;
 
         // Mirrorplacing
-
         map = FindObjectOfType<Tilemap>();
-       
+
+        mirrors = new List<Mirror>();
+
+        mirrors.Add(new Mirror(map));
+
         // Mirrorplacing
     }
 
     // Update is called once per frame
     public void Update()
     {
-        
+
+        mirrors[mirrors.Count - 1].setPosOnGrid();//Der Spiegel der an der Maus hängt
+
         if (Input.GetMouseButtonDown(0))
         {
 
-            addMirror();
+            mirrorAdded = mirrors[mirrors.Count - 1].addMirror();
 
+            if (mirrorAdded)
+            {
+                mirrors.Add(new Mirror(map));
+            }
+           
         }
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && mirrorAdded) //&& mirrorAdded damit nicht neu gerechnet wird ohne das ein Spiegel erstellt wurde
         {
             this.setChanges(true);
             Debug.Log("New Changes!");
+
+            mirrorAdded = false;
         }
 
         if (hasChanges)
@@ -323,99 +336,6 @@ public class Laser : MonoBehaviour
         return CubeFace.None;
     }
     
-    /// ///////////////////// Davids Zeug
     
-    public void addMirror()
-    {
-
-        GameObject mir;
-        Vector3 mouse_pos, pos = new Vector3();
-
-        mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition); Debug.Log("1");
-
-       if (mouse_pos[0] >= 0)
-       {
-            pos[0] = (int)mouse_pos[0] + map.transform.localScale.x / 2;
-       }
-       else
-       {
-           pos[0] = (int)mouse_pos[0] - map.transform.localScale.x / 2;
-       }
-
-
-       if(pos[0] % map.transform.localScale.x == 0)//Wenn auf Rahmen gesetzt
-       {
-            pos[0] = (int)mouse_pos[0];
-       }
-
-
-       if (mouse_pos[0] >= 0)
-       {
-           pos[1] = (int)mouse_pos[1] + map.transform.localScale.y / 2;
-       }
-       else
-       {
-           pos[1] = (int)mouse_pos[1] - map.transform.localScale.y / 2;
-       }
-
-        if (pos[1] % map.transform.localScale.y == 0)//Wenn auf Rahmen gesetzt
-        {
-            pos[1] = (int)mouse_pos[1];
-        }
-
-
-        pos[2] = 0; //z = 0
-
-        Debug.Log("Click at " + mouse_pos);
-        Debug.Log("Tile set at " + pos);
-
-        if (!isOtherMirror(pos))
-        {
-
-            mir = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            mir.gameObject.name = "Mirror " + nr;
-
-            //newMir.transform.SetParent(grid[0].transform);
-            mir.transform.SetParent(map.transform);
-            mir.transform.Rotate(0, 0, 45);
-            mir.transform.position = pos;
-            mir.transform.localScale = new Vector3(0.7f, 0.7f, 1);
-
-            Debug.Log("New Mirror " + nr);
-
-            nr++;
-
-        }
-        else
-        {
-            Debug.Log("Mirror not created");
-        }
-
-
-    }
-
-    public bool isOtherMirror(Vector3 pos)
-    {
-
-        bool erg = false;
-        GameObject[] otherMir;
-
-        otherMir = FindObjectsOfType<GameObject>();
-
-        for (int x = 0; x < otherMir.Length - 1; x++) //-1 weil will ja nicht den Akt;
-        {
-
-            if (otherMir[x].transform.position == pos)
-            {
-                erg = true;
-
-                break;
-            }
-
-        }
-
-        return erg;
-
-    }
 
 }
