@@ -22,11 +22,19 @@ public class Mirror : ScriptableObject //Für Destroy und find Objects
         Destroy(mir.GetComponent<BoxCollider>());
         mir.gameObject.name = "Mirror(onMouse) ";
         mir.transform.SetParent(map.transform);
-        mir.transform.Rotate(0, 0, 45);
-        mir.transform.localScale = new Vector3(0.7f, 0.7f, 1);
 
-        mir.GetComponent<MeshRenderer>().material.shader = Shader.Find("Sprites/Default");
-        mir.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(0.4f, 0.4f, 0.4f, 0.7f)); 
+        // Make the mirror stand straight;
+        mir.transform.localScale = new Vector3(1f, 1f, 1);
+        //mir.transform.Rotate(0, 0, 45);
+        //mir.transform.localScale = new Vector3(0.7f, 0.7f, 1);
+
+
+        Material reflMat = Resources.Load<Material>("Materials/ReflectorMaterial");
+        mir.GetComponent<MeshRenderer>().material = reflMat;
+        mir.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(0.4f, 0.4f, 0.4f, 0.7f));
+
+        // Original
+        //mir.GetComponent<MeshRenderer>().material.shader = Shader.Find("Sprites/Default");
 
         setPosOnGrid();
 
@@ -43,7 +51,7 @@ public class Mirror : ScriptableObject //Für Destroy und find Objects
 
             mir.gameObject.name = "Mirror " + nr;
             mir.AddComponent<BoxCollider>();
-            mir.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(0.6f, 0.6f, 0.6f, 1));
+            mir.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 1f);
 
             Debug.Log("New Mirror " + nr);
             Debug.Log("on Position: " + mir.transform.position);

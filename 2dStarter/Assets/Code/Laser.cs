@@ -7,12 +7,11 @@ using UnityEngine.Tilemaps;
 public class Laser : MonoBehaviour
 {
 
-
     public class LaserTrace
     {
         public List<Vector3> tracePoints;
         public List<LaserTrace> nodes;
-        
+
         public LaserTrace()
         {
             tracePoints = new List<Vector3>();
@@ -25,7 +24,7 @@ public class Laser : MonoBehaviour
     private LineRenderer lineRenderer;
     public Transform LaserHit;
 
-    private int maxReflectionCount = 10;
+    private int maxReflectionCount = 50;
     private static int traceCount = 0;
     private int renderCount = 1;
 
@@ -33,6 +32,9 @@ public class Laser : MonoBehaviour
     private LaserTrace pointz = new LaserTrace();
     private bool hasChanges;
     List<LineRenderer> rendererZ = new List<LineRenderer>();
+
+    // UI variables;
+    public bool showOnHover = true;
 
 
     // Davids Klasse;
@@ -45,6 +47,13 @@ public class Laser : MonoBehaviour
 
 
     //private List<Vector2> asds = new List<Vector2>();
+
+
+    public void setShowOnHover(bool show)
+    {
+        Debug.Log("Changing ShowOnHover state to: " + show);
+        showOnHover = show;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -69,8 +78,10 @@ public class Laser : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-
-        mirrors[mirrors.Count - 1].setPosOnGrid();//Der Spiegel der an der Maus hängt
+        if (showOnHover)
+        {
+            mirrors[mirrors.Count - 1].setPosOnGrid();//Der Spiegel der an der Maus hängt
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -81,7 +92,7 @@ public class Laser : MonoBehaviour
             {
                 mirrors.Add(new Mirror(map));
             }
-           
+
         }
         if (Input.GetMouseButtonUp(0) && mirrorAdded) //&& mirrorAdded damit nicht neu gerechnet wird ohne das ein Spiegel erstellt wurde
         {
@@ -116,8 +127,8 @@ public class Laser : MonoBehaviour
                 rendererZ = new List<LineRenderer>();
             }
 
-
-            pointz = drawReflection(transform.position, transform.up, 0, maxReflectionCount, pointz);
+            // Schieß in 45° Wingl
+            pointz = drawReflection(transform.position, new Vector3(1, 1, 0), 0, maxReflectionCount, pointz);
 
             // Draw the in
             lineRenderer.positionCount = pointz.tracePoints.Count;
@@ -157,16 +168,6 @@ public class Laser : MonoBehaviour
                     Debug.DrawLine(pointz.nodes[y].tracePoints[j], pointz.nodes[y].tracePoints[j] * 1.2f);
                 }
             }
-
-            // Old;
-            //lineRenderer.positionCount = pointz.Count;
-            //for (int i = 0; i < pointz.Count; i++)
-            //{
-            //    lineRenderer.SetPosition(i, pointz[i]);
-            //    Debug.Log(pointz[i]);
-            //}
-            //Debug.Log(string.Format("Got {0} reflection points", pointz.Count));
-
 
             Debug.Log("Jobs done!");
 
@@ -220,27 +221,19 @@ public class Laser : MonoBehaviour
                     Debug.Log(string.Format("Hit at: {0}", GetHitFace(hit)));
                     Debug.Log("Center: " + hit.transform.position);
 
+                    var rechts = new Vector3(1, 1, 0);
+                    var links = new Vector3(-1, 1, 0);
 
-
-                    // Noch benötigt?
-                    //var list1 = drawReflection(position, links, bounceCount + 1, refRemaining - 1, poss);
-                    //return drawReflection(position, direction, bounceCount + 1, refRemaining - 1, list1);
-
-                    // Rechts
-
-                    var rechts = new Vector3(1, 0, 0);
-                    var links = new Vector3(-1, 0, 0);
-
-                    position = hit.transform.position;
-
+                    var calcPos = hit.transform.position;
+                    position = hit.point;
 
 
                     // EXPERIMENTAL
 
                     if (true)
                     {
-                        var tmp = position;
-                        tmp.x -= 0.5f;
+                        var tmp = calcPos;
+                        tmp.x -= 1f;
 
                         LaserTrace left = new LaserTrace();
                         left.tracePoints.Add(tmp);
@@ -250,8 +243,8 @@ public class Laser : MonoBehaviour
                         Debug.Log("Found " + left.tracePoints.Count + " reflection points");
 
 
-                        tmp = position;
-                        tmp.x += 0.5f;
+                        tmp = calcPos;
+                        tmp.x += 1f;
 
                         LaserTrace right = new LaserTrace();
                         right.tracePoints.Add(tmp);
@@ -300,6 +293,8 @@ public class Laser : MonoBehaviour
         this.hasChanges = flag;
     }
 
+
+
     private enum CubeFace
     {
         None,
@@ -335,7 +330,7 @@ public class Laser : MonoBehaviour
 
         return CubeFace.None;
     }
-    
-    
+
+
 
 }
