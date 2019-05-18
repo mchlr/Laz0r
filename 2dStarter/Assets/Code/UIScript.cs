@@ -15,7 +15,8 @@ public class UIScript : MonoBehaviour
         Debug.Log(laser);
 
         Laser lazorScript = laser.GetComponent<Laser>();
-        lazorScript.showOnHover = show;
+
+        lazorScript.setShowOnHover(show);
 
         Debug.Log("Set showOnHover to: " + lazorScript.showOnHover);
     }
