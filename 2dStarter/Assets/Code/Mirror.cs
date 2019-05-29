@@ -4,20 +4,37 @@ public class Mirror : TilemapObject, Placeable_if
 {
 
     private static int nr = 1;
-    private GameObject mir;
 
-    public void hover()
+
+    public void hover(bool b)
     {
-        mir = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        Destroy(mir.GetComponent<BoxCollider>());
 
-        mir.gameObject.name = "Mirror(onMouse) ";
-        mir.transform.SetParent(map.transform);
-        mir.transform.localScale = new Vector3(1f, 1f, 0);
+        if (obj == null)
+        {
+            obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            Destroy(obj.GetComponent<BoxCollider>());
 
-        Material reflMat = Resources.Load<Material>("Materials/ReflectorMaterial");
-        mir.GetComponent<MeshRenderer>().material = reflMat;
-        mir.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(0.4f, 0.4f, 0.4f, 0.7f));
+            obj.gameObject.name = "Mirror(onMouse) ";
+            obj.transform.SetParent(map.transform);
+            obj.transform.localScale = new Vector3(1f, 1f, 0);
+
+            Material reflMat = Resources.Load<Material>("Materials/ReflectorMaterial");
+            obj.GetComponent<MeshRenderer>().material = reflMat;
+
+        }
+
+        if (b)
+        {
+
+            obj.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1,1,1, 0.7f));
+            
+        }
+        else
+        {
+
+            obj.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1,1,1, 0.0f));
+
+        }
 
         setPos();
 
@@ -29,15 +46,15 @@ public class Mirror : TilemapObject, Placeable_if
 
         setPos();
 
-        if (!isOtherObj(mir))
+        if (!isOtherObj())
         {
 
-            mir.gameObject.name = "Mirror " + nr;
-            mir.AddComponent<BoxCollider>();
-            mir.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 1f);
+            obj.gameObject.name = "Mirror " + nr;
+            obj.AddComponent<BoxCollider>();
+            obj.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 1f);
 
             Debug.Log("New Mirror " + nr);
-            Debug.Log("on Position: " + mir.transform.position);
+            Debug.Log("on Position: " + obj.transform.position);
 
             nr++;
 
@@ -53,23 +70,36 @@ public class Mirror : TilemapObject, Placeable_if
 
     public void del()
     {
-        Destroy(mir);
+        Destroy(obj);
     }
 
-    public void move()
+   /* public void move()
     {
         del();
-        hover();
-    }
+        hover(true);
+    }*/
 
     public void setPos()
     {
-        mir.transform.position = mouseToTilePos();
+        obj.transform.position = mouseToTilePos();
     }
 
     public Vector3 getPos()
     {
-        return mir.transform.position;
+        return obj.transform.position;
+    }
+
+
+    public bool isObjMarked(Placeable_if otherObj)
+    {
+
+        if (obj.transform.position == otherObj.getPos())
+        {
+            return true;
+        }
+
+        return false;
+
     }
 
 }

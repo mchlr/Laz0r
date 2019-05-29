@@ -5,6 +5,7 @@ public abstract class TilemapObject : ScriptableObject
 {
 
     public Tilemap map;
+    public GameObject obj;
 
     public TilemapObject()
     {
@@ -55,15 +56,15 @@ public abstract class TilemapObject : ScriptableObject
 
     }
 
-    public bool isOtherObj(GameObject thisObj)
+    public bool isOtherObj()
     {
 
-        GameObject[] obj = FindObjectsOfType<GameObject>(); ;
+        GameObject[] otherObj = FindObjectsOfType<GameObject>(); ;
 
-        for (int x = 0; x < obj.Length; x++)
+        for (int x = 0; x < otherObj.Length; x++)
         {
 
-            if (obj[x].transform.position == thisObj.transform.position && !obj[x].Equals(thisObj))
+            if (otherObj[x].transform.position == obj.transform.position && !otherObj[x].Equals(obj))
             {
                 return true;
 

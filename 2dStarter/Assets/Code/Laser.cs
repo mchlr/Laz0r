@@ -40,8 +40,8 @@ public class Laser : MonoBehaviour
     // Davids Klasse;
 
     private Tilemap map;
-    private List<Mirror> mirrors;
-    private bool mirrorAdded = false;
+    private List<Placeable_if> playerObj;
+    private bool changeMade = false;
 
     // David 
 
@@ -66,11 +66,10 @@ public class Laser : MonoBehaviour
         hasChanges = true;
 
         // Mirrorplacing
-        map = FindObjectOfType<Tilemap>();
+        playerObj = new List<Placeable_if>();
 
-        mirrors = new List<Mirror>();
-
-        mirrors.Add(new Mirror(map));
+        playerObj.Add(new Mirror());
+        playerObj[0].hover(true);
 
         // Mirrorplacing
     }
@@ -78,28 +77,63 @@ public class Laser : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-        if (showOnHover)
-        {
-            mirrors[mirrors.Count - 1].setPosOnGrid();//Der Spiegel der an der Maus hängt
-        }
+
+        playerObj[playerObj.Count - 1].hover(showOnHover);//Der Spiegel der an der Maus hängt
+        
 
         if (Input.GetMouseButtonDown(0))
         {
 
-            mirrorAdded = mirrors[mirrors.Count - 1].addMirror();
-
-            if (mirrorAdded)
+            if (showOnHover)
             {
-                mirrors.Add(new Mirror(map));
+
+                changeMade = playerObj[playerObj.Count - 1].add();
+
+                if (changeMade)
+                {
+                    playerObj.Add(new Mirror());
+                    playerObj[playerObj.Count - 1].hover(true);
+                }
+
+            }
+            else
+            {
+
+                // jetzt erstmal nur move implementiert
+                //später unterscheiden ob löschen oder bewegen
+      
+
+
+                for (int x = 0; x < playerObj.Count - 1; x++) //< playerObj.Count - 1; Da letztes objekt das an der Maus ist (unsichtbar) 
+                {
+
+                    if (playerObj[x].isObjMarked(playerObj[playerObj.Count - 1]))
+                    {
+                        playerObj[playerObj.Count - 1].del();
+                        playerObj[playerObj.Count - 1] = playerObj[x]; // der letzte wird eh gehovert und kann platziert werden
+                        playerObj.RemoveAt(x);
+                        showOnHover = true;
+                        changeMade = true;
+                    }
+
+                    /*Löschen würde so ausehen
+                     * if(das von oben && löschen gedrückt
+                     * playerObj[x].del();
+                     * playerObj.RemoveAt(x);
+                     */
+
+                }
+
+
             }
 
         }
-        if (Input.GetMouseButtonUp(0) && mirrorAdded) //&& mirrorAdded damit nicht neu gerechnet wird ohne das ein Spiegel erstellt wurde
+        if (Input.GetMouseButtonUp(0) && changeMade) //&& changeMade damit nicht neu gerechnet wird ohne das ein Spiegel erstellt wurde
         {
             this.setChanges(true);
             Debug.Log("New Changes!");
 
-            mirrorAdded = false;
+            changeMade = false;
         }
 
         if (hasChanges)
@@ -334,3 +368,5 @@ public class Laser : MonoBehaviour
 
 
 }
+ 
+ 
