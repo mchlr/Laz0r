@@ -53,8 +53,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Code\GameSystem.cs" />
+     <Compile Include="Assets\Code\Inventory.cs" />
      <Compile Include="Assets\Code\Laser.cs" />
      <Compile Include="Assets\Code\Mirror.cs" />
+     <Compile Include="Assets\Code\Placeable_If.cs" />
+     <Compile Include="Assets\Code\Reflector.cs" />
+     <Compile Include="Assets\Code\TestInventory.cs" />
+     <Compile Include="Assets\Code\TilemapObject.cs" />
+     <Compile Include="Assets\Code\TilemapPrefab.cs" />
      <Compile Include="Assets\Code\ui\LoadSceneOnClick.cs" />
      <Compile Include="Assets\Code\ui\QuitOnClick.cs" />
      <Compile Include="Assets\Code\ui\ShowDialog.cs" />

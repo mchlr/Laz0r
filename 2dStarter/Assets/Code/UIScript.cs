@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class UIScript : MonoBehaviour
 {
+
+    public GameObject InventoryPanel;
+
     public void updateHoverState(bool show)
     {
         GameObject laser;
@@ -20,4 +23,15 @@ public class UIScript : MonoBehaviour
 
         Debug.Log("Set showOnHover to: " + lazorScript.showOnHover);
     }
+    public void setDeleteState(bool val)
+    {
+        GameSystem.me.setDeleteState(val);
+    }
+    public void setMoveState(bool val)
+    {
+        GameSystem.me.setMoveState(val);
+    }
+
+
+
 }
