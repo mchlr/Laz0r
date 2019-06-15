@@ -26,13 +26,13 @@ public class Mirror : TilemapObject, Placeable_if
         if (b)
         {
 
-            obj.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1, 1, 1, 0.7f));
-
+            obj.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1,1,1, 0.7f));
+            
         }
         else
         {
 
-            obj.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1, 1, 1, 0.0f));
+            obj.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1,1,1, 0.0f));
 
         }
 
@@ -73,11 +73,11 @@ public class Mirror : TilemapObject, Placeable_if
         Destroy(obj);
     }
 
-    /* public void move()
-     {
-         del();
-         hover(true);
-     }*/
+   /* public void move()
+    {
+        del();
+        hover(true);
+    }*/
 
     public void setPos()
     {

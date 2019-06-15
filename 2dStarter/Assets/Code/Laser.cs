@@ -40,8 +40,8 @@ public class Laser : MonoBehaviour
     // Davids Klasse;
 
     private Tilemap map;
-    private List<Mirror> mirrors;
-    private bool mirrorAdded = false;
+    private List<Placeable_if> playerObj;
+    private bool changeMade = false;
 
     // David 
 
@@ -229,12 +229,12 @@ public class Laser : MonoBehaviour
                 //}
             }
         }
-        if (Input.GetMouseButtonUp(0) && mirrorAdded) //&& mirrorAdded damit nicht neu gerechnet wird ohne das ein Spiegel erstellt wurde
+        if (Input.GetMouseButtonUp(0) && changeMade) //&& changeMade damit nicht neu gerechnet wird ohne das ein Spiegel erstellt wurde
         {
             this.setChanges(true);
             //Debug.Log("New Changes!");
 
-            mirrorAdded = false;
+            changeMade = false;
         }
 
         if (hasChanges)
@@ -490,3 +490,5 @@ public class Laser : MonoBehaviour
 
 
 }
+ 
+ 

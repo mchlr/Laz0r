@@ -37,10 +37,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 0
-    y: 73.333336
-    width: 1824
-    height: 1143
+    x: -1920
+    y: 171
+    width: 1920
+    height: 997
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 5}
@@ -137,7 +137,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1824
+    width: 1920
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -158,8 +158,8 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 1123
-    width: 1824
+    y: 977
+    width: 1920
     height: 20
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -417,7 +417,7 @@ MonoBehaviour:
     m_VAllowExceedBaseRangeMax: 1
     m_ScaleWithWindow: 0
     m_HSlider: 1
-    m_VSlider: 0
+    m_VSlider: 1
     m_IgnoreScrollWheelUntilClicked: 0
     m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/Code
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: C:\Users\mrenn\Documents\Studium\4. Semester\GameDevelopment\git\GameDevelopment\2dStarter
+  m_LastProjectPath: C:\Users\David\Desktop\Unity\GameDevelopment\2dStarter
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
