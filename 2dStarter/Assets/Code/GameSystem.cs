@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Linq;
 
 public class GameSystem : MonoBehaviour
 {
@@ -59,7 +60,11 @@ public class GameSystem : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {      
+    {
+
+        
+
+
         if(doHover)
         {
             currentHoveringObject.hover(true);
@@ -70,39 +75,40 @@ public class GameSystem : MonoBehaviour
             Debug.Log("[GameSystem] - Click!");
             Vector3 mouse_pos = setPosOnGrid(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
-
-            if (doDelete)
-            {
-                DeleteReflector(mouse_pos);
-            }
-
-            if (doMove)
-            {
-                DeleteReflector(mouse_pos);
-
-                doHover = true;
-            }
-
-            //hoverObject.hover(false);
-            if (doHover && currentHoveringObject.add(GameObjects.Count))
-            {
-                GameObjects.Add(currentHoveringObject);
-                if (PlayerInv.canCreate(hoverPrefab))
+            if (GameMap.HasTile(GameMap.WorldToCell(mouse_pos))) {
+                if (doDelete)
                 {
-                    currentHoveringObject = new TilemapPrefab(hoverPrefab);
+                    DeleteReflector(mouse_pos);
+                }
 
-                    // If an object has been moved;
-                    if (doMove)
+                if (doMove)
+                {
+                    DeleteReflector(mouse_pos);
+
+                    doHover = true;
+                }
+
+                //hoverObject.hover(false);
+                if (doHover && currentHoveringObject.add(GameObjects.Count))
+                {
+                    if (PlayerInv.canCreate(hoverPrefab))
                     {
-                        doMove = false;
+                        GameObjects.Add(currentHoveringObject);
+                        currentHoveringObject = new TilemapPrefab(hoverPrefab);
+
+                        // If an object has been moved;
+                        if (doMove)
+                        {
+                            doMove = false;
+                            doHover = false;
+                        }
+                    }
+                    else
+                    {
                         doHover = false;
                     }
+                    GameLaser.setChanges(true);
                 }
-                else
-                {
-                    doHover = false;
-                }
-                GameLaser.setChanges(true);
             }
         }
     }
@@ -112,12 +118,6 @@ public class GameSystem : MonoBehaviour
 
     public void setHoverObject(GameObject tar)
     {
-
-        // TODO: Make this work;
-        // PlayerInv.decrement(tar);
-
-        
-
         currentHoveringObject = new TilemapPrefab(tar);
         hoverPrefab = tar;
 
@@ -205,7 +205,7 @@ public class GameSystem : MonoBehaviour
                 place.del();
 
                 if (doHover) { setHoverObject(place.obj); }
-                
+
                 GameLaser.setChanges(true);
                 GameObjects.RemoveAt(remIdx);
                 break;

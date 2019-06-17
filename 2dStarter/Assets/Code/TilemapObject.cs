@@ -9,6 +9,11 @@ public abstract class TilemapObject : MonoBehaviour
 
     public TilemapObject()  
     {
+        //map = FindObjectOfType<Tilemap>();
+    }
+
+    public void Awake()
+    {
         map = FindObjectOfType<Tilemap>();
     }
 

@@ -53,15 +53,6 @@ public class Laser : MonoBehaviour
 
     // TESTING 27.05;
 
-
-
-    // TODO: REMOVE - TESTING FUNCTION 
-    public void setSet(GameObject newSet)
-    {
-        toSet = newSet;
-        mirrors.Add(new Mirror());
-    }
-
     public Vector3 setPosOnGrid(Vector3 mouse_pos)
     {
         Debug.Log("Click at " + mouse_pos.ToString());
