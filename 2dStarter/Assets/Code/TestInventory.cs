@@ -58,6 +58,7 @@ public class TestInventory : MonoBehaviour
 
                 // Set the buttons apperance to the image/texture of the corresponding GameObject/ReflectorType;
                 btn.GetComponent<Button>().GetComponent<RawImage>().texture = e.Key.GetComponent<MeshRenderer>().materials[0].mainTexture;
+                btn.GetComponent<Button>().GetComponent<RawImage>().SizeToParent();
 
                 // TODO: Create a "generic" decrement()/delete()-method that sticks to decrementing e.value;
 

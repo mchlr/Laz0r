@@ -115,7 +115,7 @@ public class TilemapPrefab : TilemapObject, Placeable_if
         else
         {
 
-            obj.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(0, 1, 0, 1));
+            obj.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1, 1, 1, 1));
 
         }
 

@@ -75,6 +75,7 @@ public class GameSystem : MonoBehaviour
             Debug.Log("[GameSystem] - Click!");
             Vector3 mouse_pos = setPosOnGrid(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
+            // Check if the player has clicked within the map;
             if (GameMap.HasTile(GameMap.WorldToCell(mouse_pos))) {
                 if (doDelete)
                 {
