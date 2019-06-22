@@ -25,23 +25,19 @@ public class TestInventory : MonoBehaviour
 
         inventory = new Dictionary<GameObject, int>();
 
-
-        //How to get a texture;
-        // basic.GetComponent<Material>().mainTexture;
-
-
         Debug.Log("[INVENTORY] - Loading Prefabs...");
 
         GameObject basic = Instantiate(Resources.Load<GameObject>("Prefabs/TestReflector"));
         inventory.Add(basic, 10);
-        Debug.Log("Loaded Basic Reflector!");
 
-
+        // Move the smol instance out of the cameras view;
+        basic.transform.position = new Vector3(1, 255, 0);
 
         GameObject split = Instantiate(Resources.Load<GameObject>("Prefabs/Split"));
         inventory.Add(split, 4);
-        Debug.Log("Loaded Split!");
 
+        // Move the smol instance out of the cameras view;
+        split.transform.position = new Vector3(1, 255, 0);
 
         // Add available blocks into the InventoryPanel in the UI;
         foreach (KeyValuePair<GameObject, int> e in inventory)

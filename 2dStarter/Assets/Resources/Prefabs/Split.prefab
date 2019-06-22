@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4749253513757036088}
   - component: {fileID: 4749253513757036089}
   m_Layer: 0
-  m_Name: PrismaCube
+  m_Name: Split
   m_TagString: PrismaCube
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

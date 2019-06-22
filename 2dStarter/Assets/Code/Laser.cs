@@ -111,13 +111,7 @@ public class Laser : MonoBehaviour
 
         Debug.Log("Delete Status = " + val);
     }
-    // TODO: REMOVE - TESTING END
 
-    public void setShowOnHover(bool show)
-    {
-        Debug.Log("Changing ShowOnHover state to: " + show);
-        showOnHover = show;
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -128,108 +122,24 @@ public class Laser : MonoBehaviour
         lineRenderer.useWorldSpace = true; // origin world points
 
         hasChanges = true;
-
-        // Mirrorplacing
-        /*
-        map = FindObjectOfType<Tilemap>();
-
-        mirrors = new List<Mirror>();
-
-        mirrors.Add(new Mirror());
-        */
-        // Mirrorplacing
     }
 
     // Update is called once per frame
     public void Update()
     {
-        if (showOnHover)
-        {
-
-            // TODO: REMOVE INTO GAMEHANLDER;
-            // COMMENTED OUT ON SUNDAY;
-
-            //mirrors[mirrors.Count - 1].add();//Der Spiegel der an der Maus hängt
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-
-            if (deleteFlag)
-            {
-                Vector3 mouse_pos = setPosOnGrid(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-
-                Debug.Log("Mouse Pos:");
-                Debug.Log(mouse_pos.ToString());
-
-                // TODO: CHECK THIS!
-                // COMMENTED OUT ON FRIDAY IN ORDER TO REDUCE ERRORRS
-
-                //foreach(Mirror mirObj in mirrors)
-                //{
-                //    Debug.Log("MirPos:");
-                //    Debug.Log(mirObj.mir.transform.position.ToString());
-
-                //    Debug.Log("is equal?");
-                //    Debug.Log(mirObj.mir.transform.position.Equals(mouse_pos));
-
-                //    if(mirObj.mir.transform.position.Equals(mouse_pos))
-                //    {
-                //        Debug.Log("Now Destroying:");
-                //        Debug.Log(mirObj.name);
-
-                //        Destroy(mirObj.mir);
-                //        mirrors.Remove(mirObj);
-
-                //        //hasChanges = true;
-                //        break;
-                //    }
-                //    else
-                //    {
-                //        Debug.Log("No Mirror found for deletion :(");
-                //    }
-                //}
-            }
-            else
-            {
-
-                // TODO: Check if still needed;
-                // Got commented out by mchlr @ 13:12 Friday
-
-                //mirrorAdded = mirrors[mirrors.Count - 1].addMirror();
-                //Debug.Log("New Mirror placed at:");
-                //Debug.Log(mirrors[mirrors.Count - 1].mir.transform.position.ToString());
-
-                //if (mirrorAdded)
-                //{
-                //    // Restart mirror placing
-                //    if (toSet == null)
-                //    {
-                //        mirrors.Add(new Mirror(map));
-                //    }
-                //    else
-                //    {
-                //        mirrors.Add(new Mirror(map, toSet));
-                //        GameSystem.me.PlayerInv.decrement(mirrors[mirrors.Count - 1].mir);
-                //    }
-
-
-
-                //    // TODO: Remove Inventory-Testing to it's final location;
-                //    Debug.Log("Decreasing Mirror count...");
-                    
-                //}
-            }
-        }
-        if (Input.GetMouseButtonUp(0) && changeMade) //&& changeMade damit nicht neu gerechnet wird ohne das ein Spiegel erstellt wurde
-        {
-            this.setChanges(true);
-            //Debug.Log("New Changes!");
-
-            changeMade = false;
-        }
+        
 
         if (hasChanges)
         {
+            GameObject[] finalz = GameObject.FindGameObjectsWithTag("Target");
+
+            foreach (var f in finalz)
+            {
+                Renderer targetRenderer = f.GetComponent<Renderer>();
+                targetRenderer.material.SetColor("_Color", Color.white);
+            }
+
+
             Debug.Log("Calculating new Reflection!");
 
             traceCount = 0;
@@ -255,12 +165,6 @@ public class Laser : MonoBehaviour
 
             // Schieß in 45° Wingl
             pointz = drawReflection(transform.position, new Vector3(1, 1, 0), 0, maxReflectionCount, pointz);
-
-            // Start experimental reflection logic;
-            hitReflection(transform.position, new Vector3(1, 1, 0));
-
-            // End experimental;
-
 
             // Draw the in
             lineRenderer.positionCount = pointz.tracePoints.Count;
@@ -301,6 +205,16 @@ public class Laser : MonoBehaviour
                 }
             }
 
+            bool hitAllFinalz = false;
+
+            foreach (var f in finalz)
+            {
+                hitAllFinalz = f.GetComponent<Renderer>().material.color.Equals(Color.green);
+                if (!hitAllFinalz) break;
+            }            
+
+            if (hitAllFinalz) GameSystem.me.finishLevel();
+
             Debug.Log("Jobs done!");
 
 
@@ -308,20 +222,7 @@ public class Laser : MonoBehaviour
         }
     }
 
-    public void hitReflection(Vector3 position, Vector3 direction)
-    {
-        if(Physics.Raycast(position, direction, out RaycastHit hit)) {
-            //Debug.Log("Got hit: " + hit);
-            Reflector hitScript =  hit.collider.gameObject.GetComponent<Reflector>();
 
-            // Calculate a new Reflection by using the hitted object;
-
-            
-            hitScript.detectHit(true, direction, hit);
-
-            //Debug.Log("We need more lumber!");
-        }
-    }
 
     public LaserTrace drawReflection(Vector3 position, Vector3 direction, int bounceCount, int refRemaining, LaserTrace poss)
     {
@@ -353,6 +254,7 @@ public class Laser : MonoBehaviour
                     //Gib grünes Licht;
                     Renderer targetRenderer = hit.transform.gameObject.GetComponent<Renderer>();
                     targetRenderer.material.SetColor("_Color", Color.green);
+
 
                     //Direction und position aktualisieren auf Treffpunkt;
                     position = hit.point;
@@ -478,6 +380,24 @@ public class Laser : MonoBehaviour
         return CubeFace.None;
     }
 
+    // DEBUG CODE - PLEASE DO NOT REMOVE (YET) 
+    // Thanks, Michael;
+
+    //public void hitReflection(Vector3 position, Vector3 direction)
+    //{
+    //    if (Physics.Raycast(position, direction, out RaycastHit hit))
+    //    {
+    //        //Debug.Log("Got hit: " + hit);
+    //        Reflector hitScript = hit.collider.gameObject.GetComponent<Reflector>();
+
+    //        // Calculate a new Reflection by using the hitted object;
+
+
+    //        hitScript.detectHit(true, direction, hit);
+
+    //        //Debug.Log("We need more lumber!");
+    //    }
+    //}
 
 
 }

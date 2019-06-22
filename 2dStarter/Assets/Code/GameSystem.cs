@@ -12,6 +12,8 @@ public class GameSystem : MonoBehaviour
     public TestInventory PlayerInv;
     public Tilemap GameMap;
     public Laser GameLaser;
+    public GameObject controlCanvas;
+    public GameObject congratsCanvas;
 
     private List<TilemapPrefab> GameObjects;
 
@@ -19,7 +21,7 @@ public class GameSystem : MonoBehaviour
 
     private bool doHover;
     private bool doDelete;
-    private bool doMove;
+    private bool doMove;  
 
 
     private GameObject hoverPrefab;
@@ -213,5 +215,17 @@ public class GameSystem : MonoBehaviour
             }
             remIdx++;
         }
+    }
+
+    public void finishLevel()
+    {
+        doHover = false;
+        doDelete = false;
+
+        TimeControl timer = controlCanvas.GetComponent<TimeControl>();
+
+        timer.StopTimer();
+        if (timer.isNewHighscore()) congratsCanvas.GetComponent<MenuAppear>().showHighscoreText();
+        congratsCanvas.GetComponent<MenuAppear>().showCongratsCanvas();
     }
 }

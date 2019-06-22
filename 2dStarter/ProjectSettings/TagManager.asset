@@ -9,6 +9,7 @@ TagManager:
   - PrismaCube
   - InventoryPanel
   - Background
+  - CongratsCanvas
   layers:
   - Default
   - TransparentFX
