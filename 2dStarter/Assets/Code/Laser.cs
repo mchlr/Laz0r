@@ -189,11 +189,7 @@ public class Laser : MonoBehaviour
             }
 
             for (int y = 0; y < pointz.nodes.Count; y++)
-            {
-                //LineRenderer newL = (new GameObject("line" + renderCount++)).AddComponent<LineRenderer>();
-
-                //Debug.Log("Rendering " + pointz.nodes[y].tracePoints.Count + " #Pointz for line" + y);
-
+            { 
                 LineRenderer rend = rendererZ[y];
 
                 int n = pointz.nodes[y].tracePoints.Count;
@@ -217,7 +213,6 @@ public class Laser : MonoBehaviour
 
             Debug.Log("Jobs done!");
 
-
             hasChanges = false;
         }
     }
@@ -232,8 +227,6 @@ public class Laser : MonoBehaviour
         // Genug reflektiert;
         if (refRemaining == 0 || traceCount >= 10)
         {
-
-            //Debug.Log("schüss");
             return poss;
         }
 
@@ -279,7 +272,7 @@ public class Laser : MonoBehaviour
 
                     // EXPERIMENTAL
 
-                    if (true)
+                    if (GetHitFace(hit) == CubeFace.Down) 
                     {
                         var tmp = calcPos;
                         tmp.x -= 1f;
@@ -368,7 +361,7 @@ public class Laser : MonoBehaviour
         if (incomingVec == new Vector3(0, 0, 0))
             return CubeFace.Oben;
 
-        if (incomingVec == new Vector3(1, 1, 1))
+        if (incomingVec == new Vector3(0, -2, 0))
             return CubeFace.Down;
 
         if (incomingVec == new Vector3(-1, -1, 0))

@@ -12,6 +12,11 @@ public class LoadSceneOnClick : MonoBehaviour
 
     public void LoadNext()
     {
-        LoadByIndex(SceneManager.GetActiveScene().buildIndex - 1);
+        LoadByIndex(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void ReloadCurrent()
+    {
+        LoadByIndex(SceneManager.GetActiveScene().buildIndex);
     }
 }

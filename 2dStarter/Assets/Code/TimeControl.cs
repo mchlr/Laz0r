@@ -18,7 +18,7 @@ public class TimeControl : MonoBehaviour {
             highscore.text = PlayerPrefs.GetInt("Highscore").ToString();
         }
         else {
-            highscore.text = "No High Scores Yet";
+            highscore.text = "-";
         }
         StartTimer();
 	}
@@ -26,13 +26,13 @@ public class TimeControl : MonoBehaviour {
     public void StartTimer () 
     {
         time = 0;
-        InvokeRepeating("IncrimentTime", 1, 1); 
+        InvokeRepeating("IncrimentTime", 1, 1);
     }
 
 	public void StopTimer()
 	{
         CancelInvoke();
-        if (PlayerPrefs.GetInt("Highscore") > time) {
+        if (PlayerPrefs.GetInt("Highscore") >= time) {
             SetHighscore();
             newHighscore = true;
         }
@@ -49,13 +49,13 @@ public class TimeControl : MonoBehaviour {
     public void ClearHighscores () 
     {
         PlayerPrefs.DeleteKey("Highscore");
-        highscore.text = "No High Scores Yet";
+        highscore.text = "-";
     }
 
     void IncrimentTime () 
     {
         time += 1;
-        timer.text = "Time: " + time;
+        timer.text = time.ToString();
     }
 
     public bool isNewHighscore()
