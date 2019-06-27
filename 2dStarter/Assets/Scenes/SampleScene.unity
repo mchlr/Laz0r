@@ -1265,6 +1265,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InventoryPanel: {fileID: 598119558}
   debugPrefab: {fileID: 0}
+  basics: 2
+  splits: 3
 --- !u!4 &646756193
 Transform:
   m_ObjectHideFlags: 0
@@ -11998,7 +12000,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 105.77997, y: 0}
+  m_AnchoredPosition: {x: 105.77991, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1588845613

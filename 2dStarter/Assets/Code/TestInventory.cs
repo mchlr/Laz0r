@@ -13,7 +13,7 @@ public class TestInventory : MonoBehaviour
     // TODO: Remove this
     public TilemapPrefab debugPrefab;
 
-
+    public int basics = 0, splits = 0;
 
     public TestInventory()
     {
@@ -28,13 +28,13 @@ public class TestInventory : MonoBehaviour
         Debug.Log("[INVENTORY] - Loading Prefabs...");
 
         GameObject basic = Instantiate(Resources.Load<GameObject>("Prefabs/TestReflector"));
-        inventory.Add(basic, 10);
+        inventory.Add(basic, basics);
 
         // Move the smol instance out of the cameras view;
         basic.transform.position = new Vector3(1, 255, 0);
 
         GameObject split = Instantiate(Resources.Load<GameObject>("Prefabs/Split"));
-        inventory.Add(split, 4);
+        inventory.Add(split, splits);
 
         // Move the smol instance out of the cameras view;
         split.transform.position = new Vector3(1, 255, 0);
