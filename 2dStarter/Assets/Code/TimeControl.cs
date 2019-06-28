@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TimeControl : MonoBehaviour {
@@ -14,11 +15,19 @@ public class TimeControl : MonoBehaviour {
 
 	void Start () 
     {
-        if (PlayerPrefs.HasKey("Highscore") == true) {
-            highscore.text = PlayerPrefs.GetInt("Highscore").ToString();
+        if (PlayerPrefs.HasKey("Highscore_" + SceneManager.GetActiveScene().name))
+        {
+            Debug.Log("Found Highscore!");
+            Debug.Log(PlayerPrefs.GetInt("Highscore_" + SceneManager.GetActiveScene().name).ToString());
+
+            string score = PlayerPrefs.GetInt("Highscore_" + SceneManager.GetActiveScene().name).ToString();
+            highscore.text = score == "9999" ? "-" : score; 
         }
-        else {
+        else
+        {
             highscore.text = "-";
+            PlayerPrefs.SetInt("Highscore_" + SceneManager.GetActiveScene().name, 9999);
+
         }
         StartTimer();
 	}
@@ -32,7 +41,7 @@ public class TimeControl : MonoBehaviour {
 	public void StopTimer()
 	{
         CancelInvoke();
-        if (PlayerPrefs.GetInt("Highscore") >= time) {
+        if (PlayerPrefs.GetInt("Highscore_" + SceneManager.GetActiveScene().name) >= time) {
             SetHighscore();
             newHighscore = true;
         }
@@ -41,14 +50,19 @@ public class TimeControl : MonoBehaviour {
 
     public void SetHighscore () 
     {
-        PlayerPrefs.SetInt("Highscore", time);
-        highscore.text = PlayerPrefs.GetInt("Highscore").ToString();
+        var name = "Highscore_" + SceneManager.GetActiveScene().name;
+
+        Debug.Log("Setting Highscore for: " + name + " to: " + time);
+
+
+        PlayerPrefs.SetInt("Highscore_" + SceneManager.GetActiveScene().name, time);
+        highscore.text = PlayerPrefs.GetInt("Highscore_" + SceneManager.GetActiveScene().name).ToString();
 
     }
 
     public void ClearHighscores () 
     {
-        PlayerPrefs.DeleteKey("Highscore");
+        PlayerPrefs.DeleteKey("Highscore_" + SceneManager.GetActiveScene().name);
         highscore.text = "-";
     }
 
